@@ -11,7 +11,6 @@
 void printxy_kr(char, char, int, int);
 void draw(void);
 void draw_dialog(void);
-void print_status(void);
 void clone_buf(char[][COL_MAX], char[][COL_MAX]);
 
 // (zero-base) row행, col열로 커서 이동
