@@ -20,13 +20,42 @@ int randint(int low, int high) {
 int jjuggumi_init(void) {
 	srand((unsigned int)time(NULL));
 
-	printf("플레이어 수: ");
-	scanf_s("%d", &n_player);
+	FILE* fp;
+	fopen_s(&fp, DATA_FILE, "r");
+	if (fp == NULL) {
+		return -1; // 파일 에러, 메인 함수에서 종료
+	}
+
+	// 플레이어 데이터 load
+	fscanf_s(fp, "%d", &n_player);
+	for (int i = 0; i < n_player; i++) {
+		PLAYER* p = &player[i]; // 수정필요
+		
+		p->id = i;
+		fscanf_s(fp, "%s%d%d",
+			p->name, (unsigned int)sizeof(p->name),
+			&(p->intel),
+			&(p->str)
+		);
+		p->stamina = 100; // 100%
+		p->is_alive = true;
+		p->has_item = false;
+	}
+
+	// 아이템 데이터 laod
+	fscanf_s(fp, "%d", &n_item);
+	for (int i = 0; i < n_item; i++) {
+		ITEM* ip = &item[i];
+		fscanf_s(fp, "%s%d%d%d",
+			ip->name, (unsigned int)sizeof(ip->name),
+			&(ip->intel_buf),
+			&(ip->str_buf),
+			&(ip->stamina_buf)
+		);
+	}
+	fclose(fp);
 
 	n_alive = n_player;
-	for (int i = 0; i < n_player; i++) {
-		player[i] = true;
-	}
 	return 0;
 }
 
@@ -42,7 +71,7 @@ void ending(void) {
 	else if (n_alive == 1) {
 		bool state = false;
 		for (int i = 0; i < n_player; i++) {
-			if (player[i] == true) {
+			if (player[i].is_alive == true) {
 				printf("우승자: %d\n", i);
 				break;
 			}
@@ -52,18 +81,25 @@ void ending(void) {
 	printf("\n");
 	printf("no. of players left: %d\n", n_alive);
 	for (int p = 0; p < n_player; p++) {
-		printf("player %2d: %5s\n", p, player[p] ? "alive" : "DEAD");
+		printf("player %2d: %5s\n", p, player[p].is_alive ? "alive" : "DEAD");
 	}
 }
 
 int main(void) {
-	jjuggumi_init();
-	intro();
-	sample();
-	mugunghwa();
+	int err = jjuggumi_init();
+	if (err == -1) { // 파일 에러
+		return -1;
+	}
+
+	// intro();
+	// sample();
+	// mugunghwa();
+	
+	// TODO
 	//nightgame();
 	//juldarigi();
 	//jebi();
+	
 	ending();
 
 	return 0;
