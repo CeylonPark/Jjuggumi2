@@ -290,4 +290,6 @@ void mugunghwa(void) {
 		Sleep(10);
 		tick += 10;
 	}
+
+	heal_stamina();
 }
