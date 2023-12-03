@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include "jjuggumi.h"
+#include "canvas.h"
 
 #define	DATA_FILE	"jjuggumi.dat"
 
@@ -73,20 +74,8 @@ void ending(void) {
 	else {
 		printf("우승자를 가리지 못했습니다.\n");
 	}
-	printf("\n");
-	printf("\n");
-	printf("no. of players left: %d \n", n_alive);
-	printf("                     intl      str   stm\n");
-	for (int i = 0; i < n_player; i++) {
-		PLAYER* p = &player[i];
-		printf("player %2d: %5s %4d(+%d) %4d(+%d) %4d%%\n",
-			p->id,
-			p->is_alive ? "alive" : "DEAD",
-			p->intel, p->item.intel_buf,
-			p->str, p->item.str_buf,
-			p->stamina
-		);
-	}
+	printf("\n\n");
+	print_status();
 }
 
 int main(void) {
