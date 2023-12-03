@@ -41,7 +41,7 @@ void mugunghwa_init(void) {
 	int a = (14 - n_alive) / 2;
 	int order = a;
 	for (int i = 0; i < n_player; i++) {
-		if (player[i] == true) {
+		if (player[i].is_alive == true) {
 			px[i] = order++;
 			py[i] = 38;
 			period[i] = randint(100, 500);
@@ -54,7 +54,7 @@ void mugunghwa_init(void) {
 }
 
 void move_manual_mugunghwa(key_t key) {
-	if (player[0] == false || (px[0] == 0 && py[0] == 0)) {
+	if (player[0].is_alive == false || (px[0] == 0 && py[0] == 0)) {
 		return;
 	}
 
@@ -70,7 +70,7 @@ void move_manual_mugunghwa(key_t key) {
 }
 
 void move_random_mugunghwa(int p) { // p: player
-	if (player[p] == false || (px[p] == 0 && py[p] == 0)) {
+	if (player[p].is_alive == false || (px[p] == 0 && py[p] == 0)) {
 		return;
 	}
 
@@ -118,7 +118,7 @@ void move_player_mugunghwa(int p, int dir) {
 
 	// Red Light에 움직일 때
 	if (turn == G_WAIT && (!is_hidden(px[p], py[p]) || !is_hidden(nx - dx[dir], ny - dx[dir]))) {
-		player[p] = false;
+		player[p].is_alive = false;
 		n_alive--;
 		n_left--;
 		cash_dead[p] = true;
@@ -197,7 +197,7 @@ void print_dead_player(void) {
 	char message[40] = "player ";
 	int j = 7;
 	for (int i = 0; i < n_player; i++) {
-		if (cash_dead[i] == true && player[i] == false) {
+		if (cash_dead[i] == true && player[i].is_alive == false) {
 			if (j == 7) {
 				message[j++] = i + '0';
 			}
