@@ -62,20 +62,16 @@ int jjuggumi_init(void) {
 void ending(void) {
 	system("cls");
 	printf("\n");
-	if (n_alive > 1) {
-		printf("우승자를 가리지 못했습니다.\n");
-	}
-	else if (n_alive == 0) {
-		printf("우승자를 가리지 못했습니다.\n");
-	}
-	else if (n_alive == 1) {
-		bool state = false;
+	if (n_alive == 1) {
 		for (int i = 0; i < n_player; i++) {
 			if (player[i].is_alive == true) {
 				printf("우승자: %d\n", i);
 				break;
 			}
 		}
+	}
+	else {
+		printf("우승자를 가리지 못했습니다.\n");
 	}
 	printf("\n");
 	printf("\n");
