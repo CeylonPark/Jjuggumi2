@@ -75,9 +75,17 @@ void ending(void) {
 	}
 	printf("\n");
 	printf("\n");
-	printf("no. of players left: %d\n", n_alive);
-	for (int p = 0; p < n_player; p++) {
-		printf("player %2d: %5s\n", p, player[p].is_alive ? "alive" : "DEAD");
+	printf("no. of players left: %d \n", n_alive);
+	printf("                     intl      str   stm\n");
+	for (int i = 0; i < n_player; i++) {
+		PLAYER* p = &player[i];
+		printf("player %2d: %5s %4d(+%d) %4d(+%d) %4d%%\n",
+			p->id,
+			p->is_alive ? "alive" : "DEAD",
+			p->intel, p->item.intel_buf,
+			p->str, p->item.str_buf,
+			p->stamina
+		);
 	}
 }
 
@@ -88,7 +96,7 @@ int main(void) {
 	}
 
 	// intro();
-	// sample();
+	sample();
 	// mugunghwa();
 	
 	// TODO
