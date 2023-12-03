@@ -18,6 +18,14 @@ int randint(int low, int high) {
 	return rnum;
 }
 
+// 플레이어 전체 회복 40
+void heal_stamina() {
+	for (int i = 0; i < n_player; i++) {
+		int ns = player[i].stamina + 40;
+		player[i].stamina = ns > 100 ? 100 : ns;
+	}
+}
+
 int jjuggumi_init(void) {
 	srand((unsigned int)time(NULL));
 

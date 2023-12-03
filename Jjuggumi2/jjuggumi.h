@@ -31,6 +31,9 @@ PLAYER player[PLAYER_MAX];
 int n_item, n_player, n_alive;
 int tick;  // 시계
 
+int randint(int low, int high);
+void heal_stamina();
+
 // 인트로
 void intro(void);
 
@@ -40,7 +43,5 @@ void mugunghwa(void);
 //void nightgame(void);
 //void juldarigi(void);
 //void jebi(void);
-
-int randint(int low, int high);
 
 #endif
