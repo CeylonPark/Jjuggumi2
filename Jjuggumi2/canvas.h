@@ -18,12 +18,12 @@ char back_buf[ROW_MAX][COL_MAX];
 // 맵 크기(위의 buf는 텍스트까지 포함한 캔버스 크기)
 int N_ROW, N_COL;
 
-void map_init(int n_row, int n_col);
-void dialog(char message[]);
-bool placable(int row, int col);
-void display(void);
 void gotoxy(int x, int y);
 void printxy(char ch, int row, int col);
+void map_init(int n_row, int n_col);
+bool placable(int row, int col);
+void display(void);
 void print_status(void);
+void dialog(char message[]);
 
 #endif
