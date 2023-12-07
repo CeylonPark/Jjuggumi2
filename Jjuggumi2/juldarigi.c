@@ -8,20 +8,19 @@
 #define J_WAIT 1
 #define J_DONE 2
 
-int juldarigi_state = J_RUN;
+int state_juldarigi = J_RUN;
 bool revival_player[PLAYER_MAX] = { 0 }; // Å»¶ôÇß´ø ÇÃ·¹ÀÌ¾îµé
-bool dialog_dead[PLAYER_MAX] = { 0 };
+bool dead_juldarigi[PLAYER_MAX] = { 0 };
 int str = 0; // Èû!
-bool juldarigi_skill[2] = { 0 };
+bool skill_juldarigi[2] = { 0 };
 
 void juldarigi_init(void);
 void juldarigi_calculate_str(void);
 void juldarigi_display(void);
-void juldarigi_use_skill(int team);
+void juldarigi_skill(int team);
 void juldarigi_shift(int start, int end, int shift);
 void juldarigi_dead(int id);
 void juldarigi_turn(void);
-void juldarigi_dialog_dead(void);
 
 void juldarigi_init(void) {
 	map_init(3, 31);
@@ -73,7 +72,7 @@ void juldarigi_display(void) {
 	gotoxy(N_ROW + 2, 0);
 	printf("str: %5d", str);
 	for (int i = 0; i < 2; i++) {
-		if (juldarigi_skill[i]) {
+		if (skill_juldarigi[i]) {
 			printf(", %sÆÀ ´¯±â!", i == 0 ? "¿ÞÂÊ" : "¿À¸¥ÂÊ");
 		}
 	}
@@ -87,8 +86,8 @@ void juldarigi_display(void) {
 	}
 }
 
-void juldarigi_use_skill(int team) {
-	if (juldarigi_state != J_RUN || (team != 0 && team != 1) || juldarigi_skill[team]) {
+void juldarigi_skill(int team) {
+	if (state_juldarigi != J_RUN || (team != 0 && team != 1) || skill_juldarigi[team]) {
 		return;
 	}
 
@@ -106,7 +105,7 @@ void juldarigi_use_skill(int team) {
 		}
 	}
 
-	juldarigi_skill[team] = true;
+	skill_juldarigi[team] = true;
 }
 
 void juldarigi_shift(int start, int end, int shift) {
@@ -122,7 +121,7 @@ void juldarigi_shift(int start, int end, int shift) {
 }
 
 void juldarigi_dead(int id) {
-	dialog_dead[id] = true;
+	dead_juldarigi[id] = true;
 
 	PLAYER* p = &player[id];
 	if (revival_player[id] == true) {
@@ -142,7 +141,7 @@ void juldarigi_turn(void) {
 	
 	int team = str > 0;
 	int shift = str > 0 ? 1 : -1;
-	for (int i = 0; i < 1 + juldarigi_skill[team]; i++) {
+	for (int i = 0; i < 1 + skill_juldarigi[team]; i++) {
 		juldarigi_shift(1, 29, shift);
 
 		if (back_buf[1][15] == '-') {
@@ -157,7 +156,7 @@ void juldarigi_turn(void) {
 		}
 
 		if (back_buf[1][14] == ' ' || back_buf[1][16] == ' ') {
-			juldarigi_state = J_DONE;
+			state_juldarigi = J_DONE;
 		}
 
 		if (shift == 1) { // if dead left
@@ -167,27 +166,6 @@ void juldarigi_turn(void) {
 			juldarigi_shift(1, 14, 1);
 		}
 	}
-}
-
-void juldarigi_dialog_dead(void) {
-	char message[40] = "player ";
-	int flag = 0;
-	for (int i = 0; i < n_player; i++) {
-		if (dialog_dead[i] == true) {
-			if (flag == 0) {
-				flag = 1;
-				sprintf_s(message, 40, "%s%d", message, i);
-			}
-			else {
-				sprintf_s(message, 40, "%s, %d", message, i);
-			}
-		}
-	}
-	if (flag == 0) {
-		return;
-	}
-	sprintf_s(message, 40, "%s dead!", message);
-	dialog(message);
 }
 
 void juldarigi(void) {
@@ -204,28 +182,28 @@ void juldarigi(void) {
 			break;
 		}
 		else if (key == K_Z || key == K_SLASH) {
-			if (juldarigi_state == J_RUN) {
+			if (state_juldarigi == J_RUN) {
 				str += key == K_Z ? -1 : 1;
 			}
 		}
 		else if (key == K_X || key == K_DOT) {
-			juldarigi_use_skill(key == K_X ? 0 : 1);
+			juldarigi_skill(key == K_X ? 0 : 1);
 		}
 		
 		if (tick % 1000 == 0) {
-			if (juldarigi_state == J_RUN) {
-				juldarigi_state = J_WAIT;
+			if (state_juldarigi == J_RUN) {
+				state_juldarigi = J_WAIT;
 				juldarigi_turn();
 			}
-			else if (juldarigi_state == J_WAIT || juldarigi_state == J_DONE) {
-				juldarigi_dialog_dead();
-				memset(dialog_dead, 0, PLAYER_MAX);
+			else if (state_juldarigi == J_WAIT || state_juldarigi == J_DONE) {
+				dialog_dead(dead_juldarigi);
+				memset(dead_juldarigi, 0, PLAYER_MAX);
 				juldarigi_calculate_str();
-				juldarigi_skill[0] = juldarigi_skill[1] = false;
-				if (juldarigi_state == J_DONE) {
+				skill_juldarigi[0] = skill_juldarigi[1] = false;
+				if (state_juldarigi == J_DONE) {
 					break;
 				}
-				juldarigi_state = J_RUN;
+				state_juldarigi = J_RUN;
 			}
 		}
 

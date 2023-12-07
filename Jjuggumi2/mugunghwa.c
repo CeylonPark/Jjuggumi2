@@ -21,7 +21,6 @@ void move_player_mugunghwa(int, int);
 void move_tail_mugunghwa(int, int, int);
 void say_mugunghwa(void);
 void turn_mugunghwa(void);
-void print_dead_player(void);
 void delete_dead_player(void);
 bool is_hidden(int, int);
 bool is_arrived(int);
@@ -29,7 +28,7 @@ bool is_arrived(int);
 bool state = false; // 게임 상태, true: 게임 중, false: 게임 종료
 int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX]; // 각 플레이어 위치, 이동 주기
 int n_left; // 게임에 남아있는 플레이어 수
-bool cash_dead[PLAYER_MAX] = { 0 }; // Red Light 때 죽은 플레이어
+bool dead_mugunghwa[PLAYER_MAX] = { 0 }; // Red Light 때 죽은 플레이어
 int turn = G_SAY; // G_SAY: 무궁화 말하기, G_TURN: 턴, G_WAIT: 3초 기다리기
 int progress = 0; // 무궁화 메시지 진행도
 
@@ -121,7 +120,7 @@ void move_player_mugunghwa(int p, int dir) {
 		player[p].is_alive = false;
 		n_alive--;
 		n_left--;
-		cash_dead[p] = true;
+		dead_mugunghwa[p] = true;
 		return;
 	}
 
@@ -183,7 +182,7 @@ void turn_mugunghwa(void) {
 		turn = G_WAIT;
 	}
 	else if (turn == G_WAIT && tick % 3000 == 0) {
-		print_dead_player();
+		dialog_dead(dead_mugunghwa);
 		delete_dead_player();
 		if (n_alive < 2 || n_left == 0) {
 			state = false;
@@ -193,40 +192,13 @@ void turn_mugunghwa(void) {
 	}
 }
 
-void print_dead_player(void) {
-	char message[40] = "player ";
-	int j = 7;
-	for (int i = 0; i < n_player; i++) {
-		if (cash_dead[i] == true && player[i].is_alive == false) {
-			if (j == 7) {
-				message[j++] = i + '0';
-			}
-			else {
-				message[j++] = ',';
-				message[j++] = ' ';
-				message[j++] = i + '0';
-			}
-		}
-	}
-	message[j++] = ' ';
-	message[j++] = 'd';
-	message[j++] = 'e';
-	message[j++] = 'a';
-	message[j++] = 'd';
-	message[j++] = '!';
-	
-	if (j != 13) {
-		dialog(message);
-	}
-}
-
 // 죽은 플레이어 사라지게 하기
 void delete_dead_player(void) {
 	for (int i = 0; i < n_player; i++) {
-		if (cash_dead[i] == true) {
+		if (dead_mugunghwa[i] == true) {
 			back_buf[px[i]][py[i]] = ' ';
 			px[i] = py[i] = 0;
-			cash_dead[i] = false;
+			dead_mugunghwa[i] = false;
 		}
 	}
 }

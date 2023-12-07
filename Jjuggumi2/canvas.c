@@ -182,3 +182,25 @@ void dialog(char message[]) {
 	clone_buf(back_buf, save_buf);
 	draw_dialog();
 }
+
+// size: PLAYER_MAX
+void dialog_dead(bool dead[]) {
+	char message[40] = "player ";
+	bool flag = false;
+	for (int i = 0; i < n_player; i++) {
+		if (dead[i] == true) {
+			if (!flag) {
+				flag = true;
+				sprintf_s(message, 40, "%s%d", message, i);
+			}
+			else {
+				sprintf_s(message, 40, "%s, %d", message, i);
+			}
+		}
+	}
+	if (!flag) {
+		return;
+	}
+	sprintf_s(message, 40, "%s dead!", message);
+	dialog(message);
+}

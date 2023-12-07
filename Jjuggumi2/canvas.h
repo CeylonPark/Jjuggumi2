@@ -25,5 +25,6 @@ bool placable(int row, int col);
 void display(void);
 void print_status(void);
 void dialog(char message[]);
+void dialog_dead(bool dead[]);
 
 #endif
