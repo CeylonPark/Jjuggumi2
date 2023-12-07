@@ -41,7 +41,7 @@ void intro(void);
 void sample(void);
 void mugunghwa(void);
 //void nightgame(void);
-//void juldarigi(void);
+void juldarigi(void);
 //void jebi(void);
 
 #endif

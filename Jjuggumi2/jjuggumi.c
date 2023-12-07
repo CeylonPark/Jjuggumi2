@@ -93,12 +93,12 @@ int main(void) {
 	}
 
 	// intro();
-	sample();
+	// sample();
 	// mugunghwa();
-	
+	juldarigi();
+
 	// TODO
 	//nightgame();
-	//juldarigi();
 	//jebi();
 	
 	ending();
