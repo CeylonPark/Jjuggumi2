@@ -31,16 +31,14 @@ void ngt_record(int player, int nx, int ny);
 void ngt_move_manual(key_t key);
 void print_player(int n1, int n2);
 
-void nightgame()
-{
+void nightgame() {
 	ngt_sample();
 }
 
-void ngt_init(int row, int col) // 세팅
-{
+void ngt_init(int row, int col) { // 세팅
 	map_init(row, col);
 	int x, y;
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < n_player; i++) {
 		// 같은 자리가 나오면 다시 생성
 		do {
 			x = randint(1, N_ROW - 2);
@@ -69,11 +67,8 @@ void ngt_init(int row, int col) // 세팅
 	
 }
 
-void ngt_sample(void)
-{
-	n_player = 3;
-	n_alive = 3;
-	ngt_init(8, 23);
+void ngt_sample(void) {
+	ngt_init(20, 40);
 	system("cls");
 	display();
 	while (1) {
@@ -353,8 +348,7 @@ void print_item(int nx, int ny, int n) { // 이 부분 중점적으로!!
 	}
 }
 
-void print_player(int n1,int n2)
-{
+void print_player(int n1,int n2) {
 	// 유저끼리 만났을 경우
 	
 	ngt_buf(save_buf, back_buf);
