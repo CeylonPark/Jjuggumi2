@@ -42,6 +42,8 @@ void juldarigi_init(void) {
 		if (!player[i].is_alive) {
 			revival_player[i] = true;
 			player[i].has_item = false; // Å»¶ôÇÑ ÇÃ·¹ÀÌ¾î´Â ¾ÆÀÌÅÛ ¸ô¼ö
+			ITEM air = { 0 };
+			player[i].item = air;
 			player[i].is_alive = true;
 		}
 	}
@@ -130,6 +132,8 @@ void juldarigi_dead(int id) {
 	}
 	else {
 		p->has_item = false;
+		ITEM air = { 0 };
+		p->item = air;
 		p->intel /= 2;
 		p->str /= 2;
 	}
