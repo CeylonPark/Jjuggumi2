@@ -45,6 +45,7 @@ void juldarigi_init(void) {
 			player[i].is_alive = true;
 		}
 	}
+	n_alive = n_player;
 
 	juldarigi_calculate_str();
 	tick = 0;
